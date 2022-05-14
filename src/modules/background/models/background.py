@@ -1,4 +1,4 @@
-# Background Model
+### Background Model ###
 
 # Main
 import pygame
