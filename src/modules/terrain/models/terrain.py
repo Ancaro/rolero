@@ -13,7 +13,7 @@ class Terrain:
     ):
         self.__terrain_image = terrain_image
         self.__surface = pygame.image.load(self.__terrain_image).convert_alpha()
-        self.__rect = self.__surface.get_rect(midbottom=(100,100))
+        self.__rect = self.__surface.get_rect(midbottom=(200,400))
     
     def get_surface(self):
         """Return the surface object of the terrain."""
