@@ -12,12 +12,14 @@ class Background:
         bg_image: str,
     ):
         self._bg_image = bg_image
-        self._surface = pygame.image.load(self._bg_image)
+        self._surface = pygame.image.load(self._bg_image).convert()
     
-    def getSurface(self):
+    def get_surface(self):
+        """Return the surface object of the background."""
         return self._surface
 
-    def fillBackground(self, screen):
+    def fill_background(self, screen):
+        """Fills the background of the passed screen with the configured background."""
         screen_w, screen_h = screen.get_size()
         bg_w, bg_h = self._surface.get_size()
         for x in range(0, screen_w, bg_w):
