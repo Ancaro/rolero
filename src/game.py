@@ -7,7 +7,10 @@ import pygame
 from src.modules.scene.models import IScene
 
 # Content
-from src.content.scenes import InitialScreenScene
+from src.content.scenes import (
+    InitialScreenScene, 
+    SelectPlayerScreenScene,
+)
 
 
 
@@ -30,7 +33,7 @@ class Game:
         self.setup_screen()
         self.set_title()
         self.setup_clk()
-        self.setup_current_scene()
+        self.setup_current_scene(InitialScreenScene())
 
     def set_title(self):
         """This is the title of the window the Game is displayed on."""
@@ -44,9 +47,9 @@ class Game:
         """Setup the CLK for the Game."""
         self.__clk = pygame.time.Clock()
 
-    def setup_current_scene(self):
+    def setup_current_scene(self, scene: IScene):
         """Setup the current scene the Game is displaying."""
-        self.__current_scene = InitialScreenScene()
+        self.__current_scene = scene
 
     def exit_game(self):
         """Closes the Game."""
@@ -58,9 +61,19 @@ class Game:
         running the game logic."""
         # player = pygame.image.load('Graphics\Main Characters\Virtual Guy\Jump (32x32).png').convert_alpha()
         # player_rect = player.get_rect(topleft = (100, 100))
+        i = 0
+        s = False
         while True:
             self.check_events() 
-            self.render_screen()           
+            self.render_screen()
+            i += 1
+            if i > 60: 
+                i = 0
+                s = not s
+            if s:
+                self.setup_current_scene(InitialScreenScene())
+            else:
+                self.setup_current_scene(SelectPlayerScreenScene())
             self.__clk.tick(self.__config.get('FRAMERATE'))
 
     def check_events(self):
