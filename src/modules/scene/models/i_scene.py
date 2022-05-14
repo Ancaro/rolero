@@ -16,4 +16,4 @@ class IScene(abc.ABC):
 
     @abc.abstractproperty
     def screen_id(self) -> str:
-        return "Rolero!!!"
+        return ""

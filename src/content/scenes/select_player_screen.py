@@ -1,4 +1,4 @@
-### Scene: Initial Screen ###
+### Scene: Select Player Screen ###
 
 # Interfaces
 from src.modules.scene.models import IScene
@@ -11,8 +11,8 @@ from src.modules.background.strategies import FillWithPatternStrategy
 
 
 
-class InitialScreenScene(IScene):
-    """Initial Screen Scene"""
+class SelectPlayerScreenScene(IScene):
+    """Select Player Screen Scene"""
 
     def __init__(
         self,
@@ -23,20 +23,16 @@ class InitialScreenScene(IScene):
 
     @property
     def screen_id(self):
-        return "initial"
+        return "select-player"
 
     def render(self, screen):
         self.__fill_background(screen)
 
     def __setup_bg(self):
         self.__bg = Background(
-            'Graphics/Background/Gray.png',
+            'Graphics/Background/Purple.png',
             FillWithPatternStrategy(),
         )
 
     def __fill_background(self, screen):
         self.__bg.fill_background(screen)
-
-    # def setup_terrain(self):
-    #     """Setup the terrain for the Game."""
-    #     self.__terrain = Terrain(self.__config.get('DEFAULT_TERRAIN'))

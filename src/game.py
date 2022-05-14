@@ -4,10 +4,10 @@
 import pygame
 
 # Interfaces
-from src.modules.scene.models.i_scene import IScene
+from src.modules.scene.models import IScene
 
 # Content
-from src.content.scenes.initial_screen import InitialScreenScene
+from src.content.scenes import InitialScreenScene
 
 
 
