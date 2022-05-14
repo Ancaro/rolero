@@ -3,9 +3,11 @@
 # Main
 import pygame
 
-# Models
-from src.modules.background.models.background import Background
-from src.modules.terrain.models.terrain import Terrain
+# Interfaces
+from src.modules.scene.models.i_scene import IScene
+
+# Content
+from src.content.scenes.initial_screen import InitialScreenScene
 
 
 
@@ -15,11 +17,10 @@ class Game:
         self,
         config: dict,
     ):
-        self._config = config
-        self._screen = None
-        self._clk = None
-        self._bg = None
-        self._terrain = None
+        self.__config = config
+        self.__screen = None
+        self.__clk = None
+        self.__current_scene: IScene = None
         self.set_up()
 
     def set_up(self):
@@ -29,28 +30,23 @@ class Game:
         self.setup_screen()
         self.set_title()
         self.setup_clk()
-        self.setup_bg()
-        self.setup_terrain()
+        self.setup_current_scene()
 
     def set_title(self):
         """This is the title of the window the Game is displayed on."""
-        pygame.display.set_caption(self._config.get('TITLE'))
+        pygame.display.set_caption(self.__config.get('TITLE'))
 
     def setup_screen(self):
         """Creates the screen of the Game."""
-        self._screen = pygame.display.set_mode(self._config.get('RESOLUTION'))
+        self.__screen = pygame.display.set_mode(self.__config.get('RESOLUTION'))
 
     def setup_clk(self):
         """Setup the CLK for the Game."""
-        self._clk = pygame.time.Clock()
+        self.__clk = pygame.time.Clock()
 
-    def setup_bg(self):
-        """Setup the background for the Game."""
-        self._bg = Background(self._config.get('DEFAULT_BG'))
-
-    def setup_terrain(self):
-        """Setup the terrain for the Game."""
-        self._terrain = Terrain(self._config.get('DEFAULT_TERRAIN'))
+    def setup_current_scene(self):
+        """Setup the current scene the Game is displaying."""
+        self.__current_scene = InitialScreenScene(self.__config)
 
     def exit_game(self):
         """Closes the Game."""
@@ -65,7 +61,7 @@ class Game:
         while True:
             self.check_events() 
             self.render_screen()           
-            self._clk.tick(self._config.get('FRAMERATE'))
+            self.__clk.tick(self.__config.get('FRAMERATE'))
 
     def check_events(self):
         """Checks for User input or other events that could affect
@@ -83,17 +79,16 @@ class Game:
     
     def render_screen(self):
         """Renders the screen with the current screen config"""
+        self.__current_scene.render(self.__screen)
         # screen.blit(ground_surface, (position_bichito[p], 200))
         # screen.blit(text_surface, (400, 10))
-        self._bg.fill_background(self._screen)
-        self._terrain.fill_terrain(self._screen)
 
-        # self._terrain.get_rect().x += 1
-        # if self._terrain.get_rect().right > 800: self._terrain.get_rect().left = 0
+        # self.__terrain.get_rect().x += 1
+        # if self.__terrain.get_rect().right > 800: self.__terrain.get_rect().left = 0
 
-        # self._screen.blit(player, player_rect)
+        # self.__screen.blit(player, player_rect)
 
-        # if not player_rect.colliderect(self._terrain.get_rect()):
+        # if not player_rect.colliderect(self.__terrain.get_rect()):
         #     player_rect.y += 1
         #     if player_rect.y >= 400:
         #         player_rect.y = 0
