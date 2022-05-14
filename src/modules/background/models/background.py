@@ -3,6 +3,9 @@
 # Main
 import pygame
 
+# Interfaces
+from src.modules.background.strategies import IFillStrategy
+
 
 
 class Background:
@@ -10,18 +13,16 @@ class Background:
     def __init__(
         self, 
         bg_image: str,
+        fill_strategy: IFillStrategy,
     ):
-        self._bg_image = bg_image
-        self._surface = pygame.image.load(self._bg_image).convert()
+        self.__bg_image = bg_image
+        self.__surface = pygame.image.load(self.__bg_image).convert()
+        self.fill_strategy = fill_strategy
     
     def get_surface(self):
         """Return the surface object of the background."""
-        return self._surface
+        return self.__surface
 
     def fill_background(self, screen):
-        """Fills the background of the passed screen with the configured background."""
-        screen_w, screen_h = screen.get_size()
-        bg_w, bg_h = self._surface.get_size()
-        for x in range(0, screen_w, bg_w):
-            for y in range(0, screen_h, bg_h):
-                screen.blit(self._surface, (x, y))
+        """Fills the background using the IFillStrategy configured."""
+        self.fill_strategy.fill_background(screen, self.__surface)

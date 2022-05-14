@@ -46,7 +46,7 @@ class Game:
 
     def setup_current_scene(self):
         """Setup the current scene the Game is displaying."""
-        self.__current_scene = InitialScreenScene(self.__config)
+        self.__current_scene = InitialScreenScene()
 
     def exit_game(self):
         """Closes the Game."""
