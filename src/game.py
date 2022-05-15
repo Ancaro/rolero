@@ -26,6 +26,8 @@ class Game:
         self.__current_scene: IScene = None
         self.set_up()
 
+        self.test = False
+
     def set_up(self):
         """Initializes everything the game needs to work, like the screen and CLK, 
         just to mention a few examples."""
@@ -61,19 +63,10 @@ class Game:
         running the game logic."""
         # player = pygame.image.load('Graphics\Main Characters\Virtual Guy\Jump (32x32).png').convert_alpha()
         # player_rect = player.get_rect(topleft = (100, 100))
-        i = 0
-        s = False
         while True:
             self.check_events() 
+            self.action()
             self.render_screen()
-            i += 1
-            if i > 60: 
-                i = 0
-                s = not s
-            if s:
-                self.setup_current_scene(InitialScreenScene())
-            else:
-                self.setup_current_scene(SelectPlayerScreenScene())
             self.__clk.tick(self.__config.get('FRAMERATE'))
 
     def check_events(self):
@@ -88,8 +81,14 @@ class Game:
             #     mouse_pos = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # print(player_rect.collidepoint(event.pos))
-                pass
+                self.test = not self.test
     
+    def action(self):
+        if self.test:
+            self.setup_current_scene(InitialScreenScene())
+        else:
+            self.setup_current_scene(SelectPlayerScreenScene())
+
     def render_screen(self):
         """Renders the screen with the current screen config"""
         self.__current_scene.render(self.__screen)
