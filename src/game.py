@@ -96,6 +96,8 @@ class Game:
     def render_screen(self):
         """Renders the screen with the current screen config."""
         self.__scenes_ctrl.render(self.__screen)
+
+
         # screen.blit(text_surface, (400, 10))
 
         # self.__terrain.get_rect().x += 1
