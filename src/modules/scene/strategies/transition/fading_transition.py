@@ -32,6 +32,7 @@ class FadingTransitionStrategy(ITransitionStrategy):
         if ts == TransitionStates.OUT:
             self.alpha += self.alpha_step
             if self.alpha >= 255:
+                self.alfa = 255
                 next_ts = TransitionStates.IN
                 next_cs = ns
                 next_ns = None
@@ -39,6 +40,7 @@ class FadingTransitionStrategy(ITransitionStrategy):
         elif ts == TransitionStates.IN:
             self.alpha -= self.alpha_step
             if self.alpha <= 0:
+                self.alpha = 0
                 next_ts = TransitionStates.OFF
         
         self.veil.set_alpha(self.alpha)
