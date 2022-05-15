@@ -2,9 +2,13 @@
 
 # Main
 import pygame
+from itertools import cycle
 
 # Interfaces
 from src.modules.scene.models import IScene
+
+# Controllers
+from src.modules.scene.controllers import ScenesController
 
 # Content
 from src.content.scenes import (
@@ -23,10 +27,13 @@ class Game:
         self.__config = config
         self.__screen = None
         self.__clk = None
-        self.__current_scene: IScene = None
-        self.set_up()
+        self.__scenes_ctrl: ScenesController = None
 
-        self.test = False
+        self.set_up()
+        
+        self.ss = cycle((InitialScreenScene(), SelectPlayerScreenScene()))
+        self.s = next(self.ss)
+        self.setup_current_scene(self.s)
 
     def set_up(self):
         """Initializes everything the game needs to work, like the screen and CLK, 
@@ -35,8 +42,8 @@ class Game:
         self.setup_screen()
         self.set_title()
         self.setup_clk()
-        self.setup_current_scene(InitialScreenScene())
-
+        self.setup_scenes_ctrl()
+        
     def set_title(self):
         """This is the title of the window the Game is displayed on."""
         pygame.display.set_caption(self.__config.get('TITLE'))
@@ -49,9 +56,12 @@ class Game:
         """Setup the CLK for the Game."""
         self.__clk = pygame.time.Clock()
 
+    def setup_scenes_ctrl(self):
+        self.__scenes_ctrl = ScenesController()
+
     def setup_current_scene(self, scene: IScene):
         """Setup the current scene the Game is displaying."""
-        self.__current_scene = scene
+        self.__scenes_ctrl.setup_current_scene(scene)
 
     def exit_game(self):
         """Closes the Game."""
@@ -65,13 +75,12 @@ class Game:
         # player_rect = player.get_rect(topleft = (100, 100))
         while True:
             self.check_events() 
-            self.action()
             self.render_screen()
             self.__clk.tick(self.__config.get('FRAMERATE'))
 
     def check_events(self):
         """Checks for User input or other events that could affect
-        the state of the Game"""
+        the state of the Game."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.exit_game()
@@ -81,18 +90,12 @@ class Game:
             #     mouse_pos = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # print(player_rect.collidepoint(event.pos))
-                self.test = not self.test
-    
-    def action(self):
-        if self.test:
-            self.setup_current_scene(InitialScreenScene())
-        else:
-            self.setup_current_scene(SelectPlayerScreenScene())
+                self.s = next(self.ss)
+                self.setup_current_scene(self.s)
 
     def render_screen(self):
-        """Renders the screen with the current screen config"""
-        self.__current_scene.render(self.__screen)
-        # screen.blit(ground_surface, (position_bichito[p], 200))
+        """Renders the screen with the current screen config."""
+        self.__scenes_ctrl.render(self.__screen)
         # screen.blit(text_surface, (400, 10))
 
         # self.__terrain.get_rect().x += 1
